@@ -1,0 +1,22 @@
+{
+  "name": "http-status-code-return",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "hugokishi <hugopacheco370@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "node build/server.js",
+    "start:dev": "ts-node-dev src/server.ts --respawn --transpileOnly",
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "@types/dotenv": "^8.2.0",
+    "ts-node-dev": "^1.1.8",
+    "typescript": "^4.3.5"
+  },
+  "dependencies": {
+    "@types/express": "^4.17.13",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1"
+  }
+}
