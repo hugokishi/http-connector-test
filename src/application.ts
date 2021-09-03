@@ -7,12 +7,17 @@ class Application {
   constructor () {
     this.express = express()
 
+    this.includeMiddlewares()
     this.includeRoutes()
   }
 
 
   private includeRoutes (): void {
     this.express.use('/', routes)
+  }
+
+  private includeMiddlewares(): void {
+    this.express.use(express.json())
   }
 }
 
