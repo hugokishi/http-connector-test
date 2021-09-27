@@ -40,6 +40,16 @@ class Routes {
       }
       return res.status(200).json({ message: "Four Request is OK" })
     })
+
+    this.router.get('/status/primary', async (req, res) => {
+      return res.status(200).json({ data: {
+        parameter: "second"
+      }})
+    })
+
+    this.router.get('/status/second', async (req, res) => {
+      return res.status(200).json({ message: "second is ok" })
+    })
   }
 }
 
