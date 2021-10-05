@@ -42,9 +42,11 @@ class Routes {
     })
 
     this.router.get('/status/primary', async (req, res) => {
-      return res.status(200).json({ data: {
-        parameter: "second"
-      }})
+      return res.status(200).json({
+        data: [{
+          message: "second"
+        }]
+      })
     })
 
     this.router.get('/status/second', async (req, res) => {
