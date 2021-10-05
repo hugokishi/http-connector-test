@@ -43,9 +43,9 @@ class Routes {
 
     this.router.get('/status/primary', async (req, res) => {
       return res.status(200).json({
-        data: [{
+        data: {
           message: "second"
-        }]
+        }
       })
     })
 
