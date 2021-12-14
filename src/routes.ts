@@ -1,58 +1,51 @@
-import { Router } from 'express'
+import { Request, Response, Router } from "express";
 
 class Routes {
-  readonly router: Router
+  readonly router: Router;
 
-  constructor () {
-    this.router = Router()
+  constructor() {
+    this.router = Router();
 
-    this.mountRoutes()
+    this.healthRoutes();
+    this.mountRoutes();
   }
 
-  mountRoutes () {
-    this.router.get('/connector/status/health', async (req, res) => {
-      const statusCode = req.headers.status
-      return res.status(Number(statusCode) || 200).send("App Running")
-    })
+  healthRoutes() {
+    this.router.get("/health", async (_, res: Response) => {
+      return res.status(200).json({ message: "Server is running!" });
+    });
+  }
 
-    this.router.get('/connector/multiple/first', async (req, res) => {
-      return res.status(200).json({ parameter: "second" })
-    })
-
-    this.router.get('/connector/multiple/second', async (req, res) => {
-      return res.status(200).send({ parameter: "third", name: "Server Running"})
-    })
-
-    this.router.post('/connector/multiple/third', async (req, res) => {
-      const { name } = req.body
-      if (!name){
-        return res.status(400).json({ message: "Error on third request" })
+  mountRoutes() {
+    this.router.get("/steps/first", async (_, res: Response) => {
+      return res
+        .status(200)
+        .json({ token: "authorization-token", bodyValidation: "random-name" });
+    });
+    this.router.post("/steps/second", async (req: Request, res: Response) => {
+      const { authorization } = req.headers;
+      const { bodyValidation } = req.body;
+      if (
+        authorization !== "authorization-token" ||
+        bodyValidation !== "random-name"
+      ) {
+        return res
+          .status(400)
+          .json({ message: "Authorization token is not provided" });
       }
-      return res.status(200).json({ parameter: "four", token: "my-secret-token", application: "third-request", name: "My Server is working" })
-    })
-
-    this.router.post("/connector/multiple/four", async (req, res) => {
-      const token = req.headers.authorization
-      const application = req.headers.application
-      const { name } = req.body
-      if (!token || !application || !name){
-        return res.status(400).json({ message: "Error on four request" })
-      }
-      return res.status(200).json({ message: "Four Request is OK" })
-    })
-
-    this.router.get('/status/primary', async (req, res) => {
-      return res.status(200).json({
-        data: {
-          message: "second"
+      return res.status(200).json({ uid: "my-uid" });
+    });
+    this.router.post(
+      "/steps/third/:uid",
+      async (req: Request, res: Response) => {
+        const uid = req.params.uid;
+        if (uid !== "my-uid") {
+          return res.status(400).json({ message: "Invalid UID" });
         }
-      })
-    })
-
-    this.router.get('/status/second', async (req, res) => {
-      return res.status(200).json({ message: "second is ok" })
-    })
+        return res.status(200).json({ message: "Finished http flow!" });
+      }
+    );
   }
 }
 
-export default new Routes().router
+export default new Routes().router;
